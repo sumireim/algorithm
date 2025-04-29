@@ -8,21 +8,18 @@ class Queue:
         self.tail = 0
 
     def enqueue(self, a: int):
-        if self.tail < len(self.queue):
-            self.queue[self.tail] = a
+        if self.tail - self.head < self.n:
+            self.queue[self.tail % self.n] = a
             self.tail += 1
-            print(self.queue)
         else:
-        print('This queue is full.')
+            print('queue is full')
 
     def dequeue(self):
         if self.head < self.tail:
-            tmp = self.queue[self.head]
-            self.queue[self.head] = None 
+            tmp = self.queue[self.head % self.n]
+            print(tmp)
             self.head += 1
-            print(self.queue)
-            return tmp
-        else: print('This queue is empty.')
+        else: print('queue is empty')
 
 
 
@@ -32,20 +29,23 @@ def main(lines):
 
     #for i, v in enumerate(lines):
     #    print("line[{0}]: {1}".format(i, v))
-    int Q = int(lines[0])
-    int K = int(lines[1])
-    for i, v in enumerate(lines[2:]):
-        q = Queue(K)
-        if lines[i] == 1:
-            q.enqueue(lines[i+2])
-        elif lines[i] == 2:
+    Q = int(lines[0])
+    K = int(lines[1])
+    q = Queue(K)
+    i = 2
+    while i < len(lines):
+        if int(lines[i]) == 1:
+            q.enqueue(int(lines[i+1]))
+            i += 2
+        elif int(lines[i]) == 2:
             q.dequeue()
+            i += 1
         else:
-            print('This queue is empty.')
+            print('Invalid Command.')
 
         
 if __name__ == '__main__':
     lines = []
     for l in sys.stdin:
-        lines.append(l.rstrip('\r\n'))
+        lines.extend(l.rstrip('\r\n').split())
     main(lines)
